@@ -7,7 +7,7 @@ import pl.pajwoj.models.Location;
 public class WeatherApplication {
 
 	public static void main(String[] args) {
-		Location k = new Location("la paz");
+		Location k = new Location("krakow");
 		System.out.printf(k.getLat() + " " + k.getLon() + " " + k.getLocationString());
 	}
 
