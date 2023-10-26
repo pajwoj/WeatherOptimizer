@@ -7,7 +7,6 @@ import javax.net.ssl.SSLHandshakeException;
 import java.net.URL;
 
 public class Location {
-    private String input;
     private String lat;
     private String lon;
     private String locationString;
@@ -19,7 +18,7 @@ public class Location {
                 + "&format=jsonv2&accept-language=pl";
 
         try {
-            System.out.println("Getting data from " + link + "...");
+            System.out.println("Getting data for " + link + "...");
             JsonNode result = objectMapper.readTree(new URL(link));
 
             lat = (result.get(0).get("lat").asText());
@@ -54,9 +53,5 @@ public class Location {
 
     public String getLocationString() {
         return locationString;
-    }
-
-    public String getInput() {
-        return input;
     }
 }
