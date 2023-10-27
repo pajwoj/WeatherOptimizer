@@ -72,7 +72,7 @@ public class OpenMeteoDayWeather {
 
     @Override
     public String toString() {
-        return "DayWeather{" +
+        return "OpenMeteoDayWeather{" +
                 "location=" + location +
                 ", temps=" + temps +
                 ", times=" + times +
