@@ -19,11 +19,11 @@ public class _7TimerDataService {
 
         ArrayList<_7TimerDayWeather> result = new ArrayList<>();
 
-        String link = "http://www.7timer.info/bin/api.pl?lon=" +
+        String link = "http://www.7timer.info/bin/civil.php?lon=" +
                 location.getLon() +
                 "&lat=" +
                 location.getLat() +
-                "&product=civil&output=json&unit=metric";
+                "&ac=0&unit=metric&output=json&tzshift=0";
 
         Gson gson = new Gson();
         _7TimerDTO data;
