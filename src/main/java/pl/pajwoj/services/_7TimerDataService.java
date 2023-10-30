@@ -4,22 +4,24 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import pl.pajwoj.dtos._7TimerDTO;
+import pl.pajwoj.models.DayWeather;
 import pl.pajwoj.models.Location;
-import pl.pajwoj.models._7TimerDayWeather;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class _7TimerDataService {
-    public static ArrayList<_7TimerDayWeather> get(Location location) {
+    public static ArrayList<DayWeather> get(Location location) {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        ArrayList<_7TimerDayWeather> result = new ArrayList<>();
+        ArrayList<DayWeather> result = new ArrayList<>();
 
-        String link = "http://www.7timer.info/bin/civil.php?lon=" +
+        String link = "https://www.7timer.info/bin/civil.php?lon=" +
                 location.getLon() +
                 "&lat=" +
                 location.getLat() +
@@ -47,7 +49,7 @@ public class _7TimerDataService {
         }
 
         int iterator = 0;
-        result.add(new _7TimerDayWeather(location));
+        result.add(new DayWeather(location));
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHH");
 
@@ -64,6 +66,8 @@ public class _7TimerDataService {
             }
 
             else {
+                _7TimerDataService.calculatePrecipitationChance(result.get(iterator));
+
                 iterator++;
                 _7TimerDataService.newWeatherObjectSetup(result, location, initDateTime, data, i);
             }
@@ -74,13 +78,23 @@ public class _7TimerDataService {
         return result;
     }
 
-    private static void newWeatherObjectSetup(ArrayList<_7TimerDayWeather> result, Location location, LocalDateTime firstDateTime, _7TimerDTO data, int i) {
-        _7TimerDayWeather newWeather = new _7TimerDayWeather(location);
+    private static void newWeatherObjectSetup(ArrayList<DayWeather> result, Location location, LocalDateTime firstDateTime, _7TimerDTO data, int i) {
+        DayWeather newWeather = new DayWeather(location);
         result.add(newWeather);
 
         newWeather.setDate(firstDateTime.toLocalDate());
         newWeather.addTime(firstDateTime.toLocalTime());
         newWeather.addTemp((Double) data.getDataseries().get(i).get("temp2m"));
         newWeather.addPrecipitation((String) data.getDataseries().get(i).get("prec_type"));
+    }
+
+    private static void calculatePrecipitationChance(DayWeather current) {
+        HashSet<String> precipitationSet = new HashSet<>(current.getPrecipitation());
+
+        if(precipitationSet.equals(new HashSet<>(List.of("none"))))
+            current.setPrecipitationChance(0.0);
+
+        else
+            current.setPrecipitationChance(100.0);
     }
 }

@@ -1,10 +1,7 @@
 package pl.pajwoj;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import pl.pajwoj.models.ECMWFDayWeather;
-import pl.pajwoj.models.OpenMeteoDayWeather;
-import pl.pajwoj.models.Location;
-import pl.pajwoj.models._7TimerDayWeather;
+import pl.pajwoj.models.*;
 import pl.pajwoj.services.ECMWFDataService;
 import pl.pajwoj.services.OpenMeteoDataService;
 import pl.pajwoj.services._7TimerDataService;
@@ -16,8 +13,8 @@ public class WeatherApplication {
 
 	public static void main(String[] args) {
 		Location k = new Location("krakow");
-		ArrayList<OpenMeteoDayWeather> test = OpenMeteoDataService.get(k);
-		ArrayList<_7TimerDayWeather> test2 = _7TimerDataService.get(k);
-		ArrayList<ECMWFDayWeather> test3 = ECMWFDataService.get(k);
+		ArrayList<DayWeather> test = OpenMeteoDataService.get(k);
+		ArrayList<DayWeather> test2 = _7TimerDataService.get(k);
+		ArrayList<DayWeather> test3 = ECMWFDataService.get(k);
 	}
 }

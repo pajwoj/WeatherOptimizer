@@ -5,16 +5,17 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OpenMeteoDayWeather {
+public class DayWeather {
     private final Location location;
-    private List<Double> temps = new ArrayList<>();
-    private List<LocalTime> times = new ArrayList<>();
-    private Double precipitationChance;
+    private final List<Double> temps = new ArrayList<>();
+    private final List<LocalTime> times = new ArrayList<>();
+    private final List<String> precipitation = new ArrayList<>();
+    private Double precipitationChance = -1.0;
     private LocalDate date;
     private LocalTime sunrise;
     private LocalTime sunset;
 
-    public OpenMeteoDayWeather(Location location) {
+    public DayWeather(Location location) {
         this.location = location;
     }
 
@@ -69,13 +70,20 @@ public class OpenMeteoDayWeather {
     public void addTemp(Double temp) {
         this.temps.add(temp);
     }
+    public void addPrecipitation(String precipitation) {
+        this.precipitation.add(precipitation);
+    }
+    public List<String> getPrecipitation() {
+        return precipitation;
+    }
 
     @Override
     public String toString() {
-        return "OpenMeteoDayWeather{" +
+        return "DayWeather{" +
                 "location=" + location +
                 ", temps=" + temps +
                 ", times=" + times +
+                ", precipitation=" + precipitation +
                 ", precipitationChance=" + precipitationChance +
                 ", date=" + date +
                 ", sunrise=" + sunrise +

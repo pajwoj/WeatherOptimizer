@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import pl.pajwoj.dtos.OpenMeteoDTO;
-import pl.pajwoj.models.OpenMeteoDayWeather;
+import pl.pajwoj.models.DayWeather;
 import pl.pajwoj.models.Location;
 
 import javax.net.ssl.SSLHandshakeException;
@@ -15,17 +15,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class OpenMeteoDataService {
-    public static ArrayList<OpenMeteoDayWeather> get(Location location) {
+    public static ArrayList<DayWeather> get(Location location) {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        ArrayList<OpenMeteoDayWeather> result = new ArrayList<>();
+        ArrayList<DayWeather> result = new ArrayList<>();
 
         String link =
                 "https://api.open-meteo.com/v1/forecast?latitude=" +
                         location.getLat() +
                         "&longitude=" +
                         location.getLon() +
-                        "&hourly=temperature_2m,precipitation_probability&daily=sunrise,sunset&timezone=Europe%2FBerlin";
+                        "&hourly=temperature_2m,precipitation_probability,precipitation&daily=sunrise,sunset&timezone=Europe%2FBerlin";
 
         Gson gson = new Gson();
         OpenMeteoDTO data;
@@ -51,28 +51,26 @@ public class OpenMeteoDataService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
         for (int i = 0; i < data.getDaily().get("time").size(); i++) {
-            OpenMeteoDayWeather current = new OpenMeteoDayWeather(location);
+            DayWeather current = new DayWeather(location);
 
             current.setDate(LocalDate.parse(data.getDaily().get("time").get(i)));
             current.setSunrise(LocalTime.parse(data.getDaily().get("sunrise").get(i), formatter));
             current.setSunset(LocalTime.parse(data.getDaily().get("sunset").get(i), formatter));
 
-            for (int j = 0; j < data.getHourly().get("time").size(); j++) {
-                double maxPrecipitationChance = 0;
-
-                if (current.getDate().equals(LocalDate.parse(data.getHourly().get("time").get(j), formatter))) {
-                    current.addTime(LocalTime.parse(data.getHourly().get("time").get(j), formatter));
-                    current.addTemp(Double.parseDouble(data.getHourly().get("temperature_2m").get(j)));
-
-                    if (Double.parseDouble(data.getHourly().get("temperature_2m").get(j)) > maxPrecipitationChance)
-                        maxPrecipitationChance = Double.parseDouble(data.getHourly().get("temperature_2m").get(j));
-
-                }
-
-                current.setPrecipitationChance(maxPrecipitationChance);
-            }
-
             result.add(current);
+        }
+
+        for (int i = 0; i < data.getHourly().get("time").size(); i++) {
+            for (DayWeather current : result) {
+                if (current.getDate().equals(LocalDate.parse(data.getHourly().get("time").get(i), formatter))) {
+                    current.addTime(LocalTime.parse(data.getHourly().get("time").get(i), formatter));
+                    current.addTemp(Double.parseDouble(data.getHourly().get("temperature_2m").get(i)));
+                    current.addPrecipitation(data.getHourly().get("precipitation").get(i));
+
+                    if (Double.parseDouble(data.getHourly().get("precipitation_probability").get(i)) > current.getPrecipitationChance())
+                        current.setPrecipitationChance(Double.parseDouble(data.getHourly().get("precipitation_probability").get(i)));
+                }
+            }
         }
 
         System.out.println("OpenMeteo done... " + result);

@@ -4,19 +4,22 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import pl.pajwoj.dtos.ECMWF_DTO;
-import pl.pajwoj.models.ECMWFDayWeather;
+import pl.pajwoj.models.DayWeather;
 import pl.pajwoj.models.Location;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class ECMWFDataService {
-    public static ArrayList<ECMWFDayWeather> get(Location location) {
+    public static ArrayList<DayWeather> get(Location location) {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        ArrayList<ECMWFDayWeather> result = new ArrayList<>();
+        ArrayList<DayWeather> result = new ArrayList<>();
 
         String link =
                 "https://api.open-meteo.com/v1/ecmwf?latitude=" +
@@ -48,10 +51,51 @@ public class ECMWFDataService {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
-        System.out.println(data);
+        int iterator = 0;
+        result.add(new DayWeather(location));
+
+        LocalDateTime initDateTime = LocalDateTime.parse(data.getHourly().get("time").get(0).toString(), formatter);
+        result.get(0).setDate(initDateTime.toLocalDate());
+
+        for(int i=0; i<data.getHourly().get("time").size(); i++) {
+            initDateTime = initDateTime.plusHours(3);
+
+            if(initDateTime.toLocalDate().isEqual(result.get(iterator).getDate())) {
+                result.get(iterator).addTime(initDateTime.toLocalTime());
+                result.get(iterator).addTemp(Double.parseDouble(data.getHourly().get("temperature_2m").get(i).toString()));
+                result.get(iterator).addPrecipitation(data.getHourly().get("precipitation").get(i).toString());
+            }
+
+            else {
+                ECMWFDataService.calculatePrecipitationChance(result.get(iterator));
+
+                iterator++;
+                ECMWFDataService.newWeatherObjectSetup(result, location, initDateTime, data, i);
+            }
+        }
 
         System.out.println("ECMWF done... " + result);
 
         return result;
+    }
+
+    private static void newWeatherObjectSetup(ArrayList<DayWeather> result, Location location, LocalDateTime initDateTime, ECMWF_DTO data, int i) {
+        DayWeather newWeather = new DayWeather(location);
+        result.add(newWeather);
+
+        newWeather.setDate(initDateTime.toLocalDate());
+        newWeather.addTime(initDateTime.toLocalTime());
+        newWeather.addTemp(Double.parseDouble(data.getHourly().get("temperature_2m").get(i).toString()));
+        newWeather.addPrecipitation(data.getHourly().get("precipitation").get(i).toString());
+    }
+
+    private static void calculatePrecipitationChance(DayWeather current) {
+        HashSet<String> precipitationSet = new HashSet<>(current.getPrecipitation());
+
+        if(precipitationSet.equals(new HashSet<>(List.of("0.0"))))
+            current.setPrecipitationChance(0.0);
+
+        else
+            current.setPrecipitationChance(100.0);
     }
 }
