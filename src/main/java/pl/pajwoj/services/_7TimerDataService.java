@@ -54,18 +54,18 @@ public class _7TimerDataService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHH");
 
         LocalDateTime initDateTime = LocalDateTime.parse(data.getInit(), formatter);
-        result.get(0).setDate(initDateTime.toLocalDate());
+        result.get(0).date(initDateTime.toLocalDate());
 
-        for(int i=0; i<data.getDataseries().size(); i++) {
+        for (int i = 0; i < data.getDataseries().size(); i++) {
             initDateTime = initDateTime.plusHours(3);
 
-            if(initDateTime.toLocalDate().isEqual(result.get(iterator).getDate())) {
-                result.get(iterator).addTime(initDateTime.toLocalTime());
-                result.get(iterator).addTemp((Double) data.getDataseries().get(i).get("temp2m"));
-                result.get(iterator).addPrecipitation((String) data.getDataseries().get(i).get("prec_type"));
-            }
+            if (initDateTime.toLocalDate().isEqual(result.get(iterator).getDate())) {
+                result.get(iterator)
+                        .newTime(initDateTime.toLocalTime())
+                        .newTemp((Double) data.getDataseries().get(i).get("temp2m"))
+                        .newPrecipitation((String) data.getDataseries().get(i).get("prec_type"));
 
-            else {
+            } else {
                 _7TimerDataService.calculatePrecipitationChance(result.get(iterator));
 
                 iterator++;
@@ -82,19 +82,20 @@ public class _7TimerDataService {
         DayWeather newWeather = new DayWeather(location);
         result.add(newWeather);
 
-        newWeather.setDate(firstDateTime.toLocalDate());
-        newWeather.addTime(firstDateTime.toLocalTime());
-        newWeather.addTemp((Double) data.getDataseries().get(i).get("temp2m"));
-        newWeather.addPrecipitation((String) data.getDataseries().get(i).get("prec_type"));
+        newWeather
+                .date(firstDateTime.toLocalDate())
+                .newTime(firstDateTime.toLocalTime())
+                .newTemp((Double) data.getDataseries().get(i).get("temp2m"))
+                .newPrecipitation((String) data.getDataseries().get(i).get("prec_type"));
     }
 
     private static void calculatePrecipitationChance(DayWeather current) {
         HashSet<String> precipitationSet = new HashSet<>(current.getPrecipitation());
 
-        if(precipitationSet.equals(new HashSet<>(List.of("none"))))
-            current.setPrecipitationChance(0.0);
+        if (precipitationSet.equals(new HashSet<>(List.of("none"))))
+            current.precipitationChance(0.0);
 
         else
-            current.setPrecipitationChance(100.0);
+            current.precipitationChance(100.0);
     }
 }

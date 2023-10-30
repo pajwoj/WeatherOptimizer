@@ -55,18 +55,18 @@ public class ECMWFDataService {
         result.add(new DayWeather(location));
 
         LocalDateTime initDateTime = LocalDateTime.parse(data.getHourly().get("time").get(0).toString(), formatter);
-        result.get(0).setDate(initDateTime.toLocalDate());
+        result.get(0).date(initDateTime.toLocalDate());
 
-        for(int i=0; i<data.getHourly().get("time").size(); i++) {
+        for (int i = 0; i < data.getHourly().get("time").size(); i++) {
             initDateTime = initDateTime.plusHours(3);
 
-            if(initDateTime.toLocalDate().isEqual(result.get(iterator).getDate())) {
-                result.get(iterator).addTime(initDateTime.toLocalTime());
-                result.get(iterator).addTemp(Double.parseDouble(data.getHourly().get("temperature_2m").get(i).toString()));
-                result.get(iterator).addPrecipitation(data.getHourly().get("precipitation").get(i).toString());
-            }
+            if (initDateTime.toLocalDate().isEqual(result.get(iterator).getDate())) {
+                result.get(iterator)
+                        .newTime(initDateTime.toLocalTime())
+                        .newTemp(Double.parseDouble(data.getHourly().get("temperature_2m").get(i).toString()))
+                        .newPrecipitation(data.getHourly().get("precipitation").get(i).toString());
 
-            else {
+            } else {
                 ECMWFDataService.calculatePrecipitationChance(result.get(iterator));
 
                 iterator++;
@@ -83,19 +83,21 @@ public class ECMWFDataService {
         DayWeather newWeather = new DayWeather(location);
         result.add(newWeather);
 
-        newWeather.setDate(initDateTime.toLocalDate());
-        newWeather.addTime(initDateTime.toLocalTime());
-        newWeather.addTemp(Double.parseDouble(data.getHourly().get("temperature_2m").get(i).toString()));
-        newWeather.addPrecipitation(data.getHourly().get("precipitation").get(i).toString());
+        newWeather
+                .date(initDateTime.toLocalDate())
+                .newTime(initDateTime.toLocalTime())
+                .newTemp(Double.parseDouble(data.getHourly().get("temperature_2m").get(i).toString()))
+                .newPrecipitation(data.getHourly().get("precipitation").get(i).toString());
+
     }
 
     private static void calculatePrecipitationChance(DayWeather current) {
         HashSet<String> precipitationSet = new HashSet<>(current.getPrecipitation());
 
-        if(precipitationSet.equals(new HashSet<>(List.of("0.0"))))
-            current.setPrecipitationChance(0.0);
+        if (precipitationSet.equals(new HashSet<>(List.of("0.0"))))
+            current.precipitationChance(0.0);
 
         else
-            current.setPrecipitationChance(100.0);
+            current.precipitationChance(100.0);
     }
 }

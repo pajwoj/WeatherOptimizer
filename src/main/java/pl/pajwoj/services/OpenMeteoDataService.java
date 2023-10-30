@@ -53,9 +53,10 @@ public class OpenMeteoDataService {
         for (int i = 0; i < data.getDaily().get("time").size(); i++) {
             DayWeather current = new DayWeather(location);
 
-            current.setDate(LocalDate.parse(data.getDaily().get("time").get(i)));
-            current.setSunrise(LocalTime.parse(data.getDaily().get("sunrise").get(i), formatter));
-            current.setSunset(LocalTime.parse(data.getDaily().get("sunset").get(i), formatter));
+            current
+                    .date(LocalDate.parse(data.getDaily().get("time").get(i)))
+                    .sunrise(LocalTime.parse(data.getDaily().get("sunrise").get(i), formatter))
+                    .sunset(LocalTime.parse(data.getDaily().get("sunset").get(i), formatter));
 
             result.add(current);
         }
@@ -63,12 +64,14 @@ public class OpenMeteoDataService {
         for (int i = 0; i < data.getHourly().get("time").size(); i++) {
             for (DayWeather current : result) {
                 if (current.getDate().equals(LocalDate.parse(data.getHourly().get("time").get(i), formatter))) {
-                    current.addTime(LocalTime.parse(data.getHourly().get("time").get(i), formatter));
-                    current.addTemp(Double.parseDouble(data.getHourly().get("temperature_2m").get(i)));
-                    current.addPrecipitation(data.getHourly().get("precipitation").get(i));
+
+                    current
+                            .newTime(LocalTime.parse(data.getHourly().get("time").get(i), formatter))
+                            .newTemp(Double.parseDouble(data.getHourly().get("temperature_2m").get(i)))
+                            .newPrecipitation(data.getHourly().get("precipitation").get(i));
 
                     if (Double.parseDouble(data.getHourly().get("precipitation_probability").get(i)) > current.getPrecipitationChance())
-                        current.setPrecipitationChance(Double.parseDouble(data.getHourly().get("precipitation_probability").get(i)));
+                        current.precipitationChance(Double.parseDouble(data.getHourly().get("precipitation_probability").get(i)));
                 }
             }
         }

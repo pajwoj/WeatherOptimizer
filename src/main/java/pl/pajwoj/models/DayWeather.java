@@ -19,60 +19,49 @@ public class DayWeather {
         this.location = location;
     }
 
-    public Location getLocation() {
-        return location;
+    public DayWeather newTemp(Double temp) {
+        this.temps.add(temp);
+        return this;
     }
 
-    public List<Double> getTemps() {
-        return temps;
+    public DayWeather newTime(LocalTime time) {
+        this.times.add(time);
+        return this;
     }
 
-    public List<LocalTime> getTimes() {
-        return times;
+    public DayWeather newPrecipitation(String precipitation) {
+        this.precipitation.add(precipitation);
+        return this;
     }
 
-    public Double getPrecipitationChance() {
-        return precipitationChance;
+    public DayWeather date(LocalDate date) {
+        this.date = date;
+        return this;
     }
 
-    public void setPrecipitationChance(Double precipitationChance) {
+    public DayWeather sunrise(LocalTime sunrise) {
+        this.sunrise = sunrise;
+        return this;
+    }
+
+    public DayWeather sunset(LocalTime sunset) {
+        this.sunset = sunset;
+        return this;
+    }
+
+    public DayWeather precipitationChance(Double precipitationChance) {
         this.precipitationChance = precipitationChance;
+        return this;
     }
 
     public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public Double getPrecipitationChance() {
+        return precipitationChance;
     }
 
-    public LocalTime getSunrise() {
-        return sunrise;
-    }
-
-    public void setSunrise(LocalTime sunrise) {
-        this.sunrise = sunrise;
-    }
-
-    public LocalTime getSunset() {
-        return sunset;
-    }
-
-    public void setSunset(LocalTime sunset) {
-        this.sunset = sunset;
-    }
-
-    public void addTime(LocalTime time) {
-        this.times.add(time);
-    }
-
-    public void addTemp(Double temp) {
-        this.temps.add(temp);
-    }
-    public void addPrecipitation(String precipitation) {
-        this.precipitation.add(precipitation);
-    }
     public List<String> getPrecipitation() {
         return precipitation;
     }
