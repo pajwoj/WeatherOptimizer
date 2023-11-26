@@ -61,10 +61,17 @@ public class ECMWFDataService {
             initDateTime = initDateTime.plusHours(3);
 
             if (initDateTime.toLocalDate().isEqual(result.get(iterator).getDate())) {
-                result.get(iterator)
-                        .newTime(initDateTime.toLocalTime())
-                        .newTemp(Double.parseDouble(data.getHourly().get("temperature_2m").get(i).toString()))
-                        .newPrecipitation(data.getHourly().get("precipitation").get(i).toString());
+                try {
+                    result.get(iterator)
+                            .newTime(initDateTime.toLocalTime())
+                            .newTemp(Double.parseDouble(data.getHourly().get("temperature_2m").get(i).toString()))
+                            .newPrecipitation(data.getHourly().get("precipitation").get(i).toString());
+
+                } catch (NullPointerException e) {
+                    result.get(iterator)
+                            .newTemp(0.0)
+                            .newPrecipitation("0");
+                }
 
             } else {
                 ECMWFDataService.calculatePrecipitationChance(result.get(iterator));
@@ -83,11 +90,18 @@ public class ECMWFDataService {
         DayWeather newWeather = new DayWeather(location);
         result.add(newWeather);
 
-        newWeather
-                .date(initDateTime.toLocalDate())
-                .newTime(initDateTime.toLocalTime())
-                .newTemp(Double.parseDouble(data.getHourly().get("temperature_2m").get(i).toString()))
-                .newPrecipitation(data.getHourly().get("precipitation").get(i).toString());
+        try {
+            newWeather
+                    .date(initDateTime.toLocalDate())
+                    .newTime(initDateTime.toLocalTime())
+                    .newTemp(Double.parseDouble(data.getHourly().get("temperature_2m").get(i).toString()))
+                    .newPrecipitation(data.getHourly().get("precipitation").get(i).toString());
+
+        } catch (NullPointerException e) {
+            newWeather
+                    .newTemp(0.0)
+                    .newPrecipitation("0");
+        }
 
     }
 
