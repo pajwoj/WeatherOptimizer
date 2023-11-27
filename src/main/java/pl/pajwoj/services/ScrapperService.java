@@ -83,17 +83,7 @@ public class ScrapperService {
             }
         }
 
-        for (DayWeather current:
-             result) {
-            for (String currentPrecipitation:
-                 current.getPrecipitation()) {
-                if(Double.parseDouble(currentPrecipitation) > 0) {
-                    current.precipitationChance(100.0);
-                    break;
-                }
-                current.precipitationChance(0.0);
-            }
-        }
+        calculatePrecipitationChance(result);
 
         System.out.println("Pogoda Dziennik done... " + result);
 
@@ -115,5 +105,19 @@ public class ScrapperService {
         result = result.replaceAll("[ ]", "-");
 
         return result.toLowerCase();
+    }
+
+    private static void calculatePrecipitationChance(ArrayList<DayWeather> result) {
+        for (DayWeather current:
+                result) {
+            for (String currentPrecipitation:
+                    current.getPrecipitation()) {
+                if(Double.parseDouble(currentPrecipitation) > 0) {
+                    current.precipitationChance(100.0);
+                    break;
+                }
+                current.precipitationChance(0.0);
+            }
+        }
     }
 }
