@@ -8,15 +8,20 @@ import pl.pajwoj.services.OpenMeteoDataService;
 import pl.pajwoj.services._7TimerDataService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootApplication
 public class WeatherApplication {
 
 	public static void main(String[] args) {
 		Location k = new Location("pruszcz gdanski");
-		ArrayList<DayWeather> test = OpenMeteoDataService.get(k);
-		ArrayList<DayWeather> test2 = _7TimerDataService.get(k);
-		ArrayList<DayWeather> test3 = ECMWFDataService.get(k);
-		ArrayList<DayWeather> test4 = ScrapperService.get(k);
+
+		Map<String, ArrayList<DayWeather>> forecastMap = new HashMap<>();
+
+		forecastMap.put("OpenMeteo", OpenMeteoDataService.get(k));
+		forecastMap.put("7Timer", _7TimerDataService.get(k));
+		forecastMap.put("ECMWF", ECMWFDataService.get(k));
+		forecastMap.put("Pogoda Dziennik", ScrapperService.get(k));
 	}
 }
