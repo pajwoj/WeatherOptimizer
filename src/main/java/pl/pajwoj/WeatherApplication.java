@@ -1,6 +1,7 @@
 package pl.pajwoj;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import pl.pajwoj.config.TrayIconConfig;
 import pl.pajwoj.models.*;
 import pl.pajwoj.services.ECMWFDataService;
 import pl.pajwoj.services.ScrapperService;
@@ -10,6 +11,7 @@ import pl.pajwoj.services._7TimerDataService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 @SpringBootApplication
 public class WeatherApplication {
@@ -23,5 +25,13 @@ public class WeatherApplication {
 		forecastMap.put("7Timer", _7TimerDataService.get(k));
 		forecastMap.put("ECMWF", ECMWFDataService.get(k));
 		forecastMap.put("Pogoda Dziennik", ScrapperService.get(k));
-	}
+
+		TrayIconConfig.init();
+
+        try {
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

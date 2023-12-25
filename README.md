@@ -1,8 +1,7 @@
 # WeatherOptimizer
 Weather forecast optimizer, engineering thesis project
 
-todo
+todo:
 
-tray icon
-
-frontend
+- frontend
+- thesis ;)
