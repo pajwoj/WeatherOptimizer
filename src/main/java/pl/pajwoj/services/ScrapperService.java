@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import pl.pajwoj.Utilities;
 import pl.pajwoj.dtos.ScrapperDTO;
 import pl.pajwoj.models.DayWeather;
 import pl.pajwoj.models.Location;
@@ -94,15 +95,7 @@ public class ScrapperService {
         String result = location.getLocationString();
         result = result.split(",")[0];
 
-        result = result.replaceAll("[ąĄ]", "a");
-        result = result.replaceAll("[ćĆ]", "c");
-        result = result.replaceAll("[ęĘ]", "e");
-        result = result.replaceAll("[łŁ]", "l");
-        result = result.replaceAll("[óÓ]", "o");
-        result = result.replaceAll("[śŚ]", "s");
-        result = result.replaceAll("[ńŃ]", "n");
-        result = result.replaceAll("[żŻźŹ]", "z");
-        result = result.replaceAll("[ ]", "-");
+        result = Utilities.removeDiacritics(result);
 
         return result.toLowerCase();
     }

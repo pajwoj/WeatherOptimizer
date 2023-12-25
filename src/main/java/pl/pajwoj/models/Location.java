@@ -2,6 +2,7 @@ package pl.pajwoj.models;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pl.pajwoj.Utilities;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.net.URL;
@@ -13,6 +14,9 @@ public class Location {
 
     public Location(String input) {
         ObjectMapper objectMapper = new ObjectMapper();
+
+        input = Utilities.removeDiacritics(input);
+
         String link = "https://nominatim.openstreetmap.org/search.php?q="
                 + input.replace(' ', '+')
                 + "&format=jsonv2&accept-language=pl";

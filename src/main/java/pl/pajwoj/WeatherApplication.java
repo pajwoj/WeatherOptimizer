@@ -17,7 +17,7 @@ import java.util.Map;
 public class WeatherApplication {
 
 	public static void main(String[] args) {
-		Location k = new Location("pruszcz gdanski");
+		Location k = new Location("polko wielkopolskie");
 
 		Map<String, ArrayList<DayWeather>> forecastMap = new HashMap<>();
 
@@ -31,7 +31,7 @@ public class WeatherApplication {
         try {
             Thread.currentThread().join();
         } catch (InterruptedException e) {
-            throw new RuntimeException("MAIN - THREAD CURRENTTHREAD JOIN");
+            throw new RuntimeException(e);
         }
     }
 }
