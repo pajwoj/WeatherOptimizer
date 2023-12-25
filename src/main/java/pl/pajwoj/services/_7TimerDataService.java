@@ -11,9 +11,7 @@ import javax.net.ssl.SSLHandshakeException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class _7TimerDataService {
     public static ArrayList<DayWeather> get(Location location) {
@@ -92,7 +90,7 @@ public class _7TimerDataService {
     private static void calculatePrecipitationChance(DayWeather current) {
         HashSet<String> precipitationSet = new HashSet<>(current.getPrecipitation());
 
-        if (precipitationSet.equals(new HashSet<>(List.of("none"))))
+        if (precipitationSet.equals(new HashSet<>(Collections.singletonList("none"))))
             current.precipitationChance(0.0);
 
         else

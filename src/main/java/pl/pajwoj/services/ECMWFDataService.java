@@ -11,9 +11,7 @@ import javax.net.ssl.SSLHandshakeException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class ECMWFDataService {
     public static ArrayList<DayWeather> get(Location location) {
@@ -108,7 +106,7 @@ public class ECMWFDataService {
     private static void calculatePrecipitationChance(DayWeather current) {
         HashSet<String> precipitationSet = new HashSet<>(current.getPrecipitation());
 
-        if (precipitationSet.equals(new HashSet<>(List.of("0.0"))))
+        if (precipitationSet.equals(new HashSet<>(Collections.singletonList("0.0"))))
             current.precipitationChance(0.0);
 
         else

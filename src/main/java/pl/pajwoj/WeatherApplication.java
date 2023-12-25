@@ -2,16 +2,16 @@ package pl.pajwoj;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import pl.pajwoj.config.TrayIconConfig;
-import pl.pajwoj.models.*;
+import pl.pajwoj.models.DayWeather;
+import pl.pajwoj.models.Location;
 import pl.pajwoj.services.ECMWFDataService;
-import pl.pajwoj.services.ScrapperService;
 import pl.pajwoj.services.OpenMeteoDataService;
+import pl.pajwoj.services.ScrapperService;
 import pl.pajwoj.services._7TimerDataService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 @SpringBootApplication
 public class WeatherApplication {
@@ -31,7 +31,7 @@ public class WeatherApplication {
         try {
             Thread.currentThread().join();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("MAIN - THREAD CURRENTTHREAD JOIN");
         }
     }
 }

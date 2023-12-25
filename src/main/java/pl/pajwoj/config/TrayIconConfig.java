@@ -1,8 +1,10 @@
 package pl.pajwoj.config;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -12,8 +14,14 @@ public class TrayIconConfig {
 
         PopupMenu menu = getPopupMenu();
 
-        String path = new File("").getAbsolutePath() + "/images/icons/icon.png";
-        Image image = Toolkit.getDefaultToolkit().getImage(path);
+        InputStream imageStream = ClassLoader.getSystemClassLoader().getResourceAsStream("trayicon.png");
+        BufferedImage image;
+        try {
+            assert imageStream != null;
+            image = ImageIO.read(imageStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         TrayIcon icon = new TrayIcon(image, "Weather Optimizer", menu);
         icon.setImageAutoSize(true);
