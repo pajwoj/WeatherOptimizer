@@ -4,5 +4,5 @@ Weather forecast optimizer, engineering thesis project
 todo:
 
 - frontend
-- exception handling
+- average forecast calculation
 - thesis ;)

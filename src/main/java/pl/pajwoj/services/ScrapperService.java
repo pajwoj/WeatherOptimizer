@@ -7,6 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import pl.pajwoj.Utilities;
 import pl.pajwoj.dtos.ScrapperDTO;
+import pl.pajwoj.exceptions.ScrapperDataException;
 import pl.pajwoj.models.DayWeather;
 import pl.pajwoj.models.Location;
 
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class ScrapperService {
-    public static ArrayList<DayWeather> get(Location location) {
+    public static ArrayList<DayWeather> get(Location location) throws ScrapperDataException {
         ObjectMapper objectMapper = new ObjectMapper();
 
         ArrayList<DayWeather> result = new ArrayList<>();
@@ -47,9 +48,7 @@ public class ScrapperService {
             System.out.println("Got Pogoda Dziennik data, parsing...");
             data.parseForecast();
         } catch (Exception e) {
-            System.out.println("Error when getting data from Pogoda Dziennik");
-            System.out.println(e.getClass().getCanonicalName());
-            throw new RuntimeException("Error when getting data from Pogoda Dziennik");
+            throw new ScrapperDataException("Error when getting data from Pogoda Dziennik");
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");

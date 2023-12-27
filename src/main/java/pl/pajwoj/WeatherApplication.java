@@ -2,6 +2,10 @@ package pl.pajwoj;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import pl.pajwoj.config.TrayIconConfig;
+import pl.pajwoj.exceptions.ECMWFDataException;
+import pl.pajwoj.exceptions.OpenMeteoDataException;
+import pl.pajwoj.exceptions.ScrapperDataException;
+import pl.pajwoj.exceptions._7TimerDataException;
 import pl.pajwoj.models.DayWeather;
 import pl.pajwoj.models.Location;
 import pl.pajwoj.services.ECMWFDataService;
@@ -16,17 +20,32 @@ import java.util.Map;
 @SpringBootApplication
 public class WeatherApplication {
 
-	public static void main(String[] args) {
-		Location k = new Location("polko wielkopolskie");
+    public static void main(String[] args) {
 
-		Map<String, ArrayList<DayWeather>> forecastMap = new HashMap<>();
+        Location k = new Location("kalisz");
 
-		forecastMap.put("OpenMeteo", OpenMeteoDataService.get(k));
-		forecastMap.put("7Timer", _7TimerDataService.get(k));
-		forecastMap.put("ECMWF", ECMWFDataService.get(k));
-		forecastMap.put("Pogoda Dziennik", ScrapperService.get(k));
+        Map<String, ArrayList<DayWeather>> forecastMap = new HashMap<>();
 
-		TrayIconConfig.init();
+        try {
+            forecastMap.put("OpenMeteo", OpenMeteoDataService.get(k));
+            forecastMap.put("7Timer", _7TimerDataService.get(k));
+            forecastMap.put("ECMWF", ECMWFDataService.get(k));
+            forecastMap.put("Pogoda Dziennik", ScrapperService.get(k));
+        } catch (OpenMeteoDataException e) {
+            System.out.println(e.getMessage());
+            forecastMap.put("OpenMeteo", null);
+        } catch (_7TimerDataException e) {
+            System.out.println(e.getMessage());
+            forecastMap.put("7Timer", null);
+        } catch (ECMWFDataException e) {
+            System.out.println(e.getMessage());
+            forecastMap.put("ECMWF", null);
+        } catch (ScrapperDataException e) {
+            System.out.println(e.getMessage());
+            forecastMap.put("Pogoda Dziennik", null);
+        }
+
+        TrayIconConfig.init();
 
         try {
             Thread.currentThread().join();
