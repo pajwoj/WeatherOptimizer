@@ -12,8 +12,8 @@ public class DayWeather {
     private final List<String> precipitation = new ArrayList<>();
     private Double precipitationChance = -1.0;
     private LocalDate date;
-    private LocalTime sunrise;
-    private LocalTime sunset;
+    private LocalTime sunrise = null;
+    private LocalTime sunset = null;
 
     public DayWeather(Location location) {
         this.location = location;
@@ -54,16 +54,36 @@ public class DayWeather {
         return this;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public Location getLocation() {
+        return location;
+    }
+
+    public List<Double> getTemps() {
+        return temps;
+    }
+
+    public List<LocalTime> getTimes() {
+        return times;
+    }
+
+    public List<String> getPrecipitation() {
+        return precipitation;
     }
 
     public Double getPrecipitationChance() {
         return precipitationChance;
     }
 
-    public List<String> getPrecipitation() {
-        return precipitation;
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public LocalTime getSunrise() {
+        return sunrise;
+    }
+
+    public LocalTime getSunset() {
+        return sunset;
     }
 
     @Override

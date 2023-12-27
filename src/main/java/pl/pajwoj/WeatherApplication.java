@@ -8,10 +8,7 @@ import pl.pajwoj.exceptions.ScrapperDataException;
 import pl.pajwoj.exceptions._7TimerDataException;
 import pl.pajwoj.models.DayWeather;
 import pl.pajwoj.models.Location;
-import pl.pajwoj.services.ECMWFDataService;
-import pl.pajwoj.services.OpenMeteoDataService;
-import pl.pajwoj.services.ScrapperService;
-import pl.pajwoj.services._7TimerDataService;
+import pl.pajwoj.services.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +19,7 @@ public class WeatherApplication {
 
     public static void main(String[] args) {
 
-        Location k = new Location("kalisz");
+        Location k = new Location("polko wielkopolskie");
 
         Map<String, ArrayList<DayWeather>> forecastMap = new HashMap<>();
 
@@ -45,6 +42,7 @@ public class WeatherApplication {
             forecastMap.put("Pogoda Dziennik", null);
         }
 
+        AverageService.get(k, forecastMap);
         TrayIconConfig.init();
 
         try {

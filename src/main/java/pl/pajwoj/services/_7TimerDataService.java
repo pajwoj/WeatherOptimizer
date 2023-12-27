@@ -83,9 +83,9 @@ public class _7TimerDataService {
         HashSet<String> precipitationSet = new HashSet<>(current.getPrecipitation());
 
         if (precipitationSet.equals(new HashSet<>(Collections.singletonList("none"))))
-            current.precipitationChance(0.0);
+            current.precipitationChance(-0.06);
 
         else
-            current.precipitationChance(100.0);
+            current.precipitationChance(100.06);
     }
 }

@@ -100,15 +100,14 @@ public class ScrapperService {
     }
 
     private static void calculatePrecipitationChance(ArrayList<DayWeather> result) {
-        for (DayWeather current:
-                result) {
+        for (DayWeather current: result) {
             for (String currentPrecipitation:
                     current.getPrecipitation()) {
                 if(Double.parseDouble(currentPrecipitation) > 0) {
-                    current.precipitationChance(100.0);
+                    current.precipitationChance(100.06);
                     break;
                 }
-                current.precipitationChance(0.0);
+                current.precipitationChance(-0.06);
             }
         }
     }
