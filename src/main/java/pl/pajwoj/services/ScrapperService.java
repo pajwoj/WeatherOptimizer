@@ -28,9 +28,7 @@ public class ScrapperService {
         ScrapperDTO data;
 
         try {
-            String link =
-                    "https://pogoda.dziennik.pl/pogoda-godzinowa/polska/" +
-                            ScrapperService.getCityFromLocation(location);
+            String link = "https://pogoda.dziennik.pl/pogoda-godzinowa/polska/" + ScrapperService.getCityFromLocation(location);
 
             System.out.println("Pogoda Dziennik link: " + link);
 
@@ -39,8 +37,7 @@ public class ScrapperService {
 
             String rawDataJSON = "";
 
-            for (Element e :
-                    doc.getElementsByTag("script")) {
+            for (Element e : doc.getElementsByTag("script")) {
                 if (e.html().contains("window.weatherLongTerm")) rawDataJSON = e.html();
             }
 
@@ -53,32 +50,24 @@ public class ScrapperService {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-        for (Map<String, Object> current :
-                data.getSunriseSunset()) {
+        for (Map<String, Object> current : data.getSunriseSunset()) {
             DayWeather currentWeather = new DayWeather(location);
 
-            currentWeather
-                    .date(LocalDate.parse(current.get("sunrise").toString(), formatter))
-                    .sunrise(LocalTime.parse(current.get("sunrise").toString(), formatter))
-                    .sunset(LocalTime.parse(current.get("sunset").toString(), formatter));
+            currentWeather.date(LocalDate.parse(current.get("sunrise").toString(), formatter))
+                    .sunrise((LocalTime.parse(current.get("sunrise").toString(), formatter)).plusHours(1))
+                    .sunset((LocalTime.parse(current.get("sunset").toString(), formatter)).plusHours(1));
 
             result.add(currentWeather);
         }
 
-        for (Map<String, Object> current :
-                data.getHourly()) {
+        for (Map<String, Object> current : data.getHourly()) {
 
-            for (DayWeather currentWeather :
-                    result) {
+            for (DayWeather currentWeather : result) {
                 if (LocalDate.parse(current.get("dateTime").toString(), formatter).isEqual(currentWeather.getDate())) {
-                    currentWeather
-                            .newTime(LocalTime.parse(current.get("dateTime").toString(), formatter))
-                            .newTemp(Double.parseDouble(current.get("temperature").toString()))
-                            .newPrecipitation(
-                                    (Double.parseDouble(current.get("rain").toString())
-                                            + Double.parseDouble(current.get("snow").toString()))
-                                            + ""
-                            );
+
+                    currentWeather.newTime(LocalTime.parse(current.get("dateTime").toString(), formatter))
+                            .newTemp(Utilities.round(Double.parseDouble(current.get("temperature").toString()), 1))
+                            .newPrecipitation((Double.parseDouble(current.get("rain").toString()) + Double.parseDouble(current.get("snow").toString())) + "");
                 }
             }
         }
@@ -95,15 +84,15 @@ public class ScrapperService {
         result = result.split(",")[0];
 
         result = Utilities.removeDiacritics(result);
+        result = result.replace(" ", "-");
 
         return result.toLowerCase();
     }
 
     private static void calculatePrecipitationChance(ArrayList<DayWeather> result) {
-        for (DayWeather current: result) {
-            for (String currentPrecipitation:
-                    current.getPrecipitation()) {
-                if(Double.parseDouble(currentPrecipitation) > 0) {
+        for (DayWeather current : result) {
+            for (String currentPrecipitation : current.getPrecipitation()) {
+                if (Double.parseDouble(currentPrecipitation) > 0) {
                     current.precipitationChance(100.06);
                     break;
                 }

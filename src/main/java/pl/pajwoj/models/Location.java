@@ -44,4 +44,13 @@ public class Location {
     public String getLocationString() {
         return locationString;
     }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "lat='" + lat + '\'' +
+                ", lon='" + lon + '\'' +
+                ", locationString='" + locationString + '\'' +
+                '}';
+    }
 }

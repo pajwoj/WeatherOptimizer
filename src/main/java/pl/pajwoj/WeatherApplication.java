@@ -19,7 +19,9 @@ public class WeatherApplication {
 
     public static void main(String[] args) {
 
-        Location k = new Location("polko wielkopolskie");
+        Location k = new Location("best");
+
+        System.out.println(k);
 
         Map<String, ArrayList<DayWeather>> forecastMap = new HashMap<>();
 
