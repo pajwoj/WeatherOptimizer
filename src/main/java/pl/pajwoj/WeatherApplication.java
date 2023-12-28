@@ -19,17 +19,21 @@ public class WeatherApplication {
 
     public static void main(String[] args) {
 
-        Location k = new Location("best");
+        if(args.length == 0) {
+            System.out.println("No location provided as argument, closing!");
+            System.exit(1);
+        }
 
-        System.out.println(k);
+        Location location = new Location(args[0]);
+        System.out.println("Grabbing data for " + location.getLocationString() + "...");
 
         Map<String, ArrayList<DayWeather>> forecastMap = new HashMap<>();
 
         try {
-            forecastMap.put("OpenMeteo", OpenMeteoDataService.get(k));
-            forecastMap.put("7Timer", _7TimerDataService.get(k));
-            forecastMap.put("ECMWF", ECMWFDataService.get(k));
-            forecastMap.put("Pogoda Dziennik", ScrapperService.get(k));
+            forecastMap.put("OpenMeteo", OpenMeteoDataService.get(location));
+            forecastMap.put("7Timer", _7TimerDataService.get(location));
+            forecastMap.put("ECMWF", ECMWFDataService.get(location));
+            forecastMap.put("Pogoda Dziennik", ScrapperService.get(location));
         } catch (OpenMeteoDataException e) {
             System.out.println(e.getMessage());
             forecastMap.put("OpenMeteo", null);
@@ -44,7 +48,7 @@ public class WeatherApplication {
             forecastMap.put("Pogoda Dziennik", null);
         }
 
-        AverageService.get(k, forecastMap);
+        AverageService.get(location, forecastMap);
         TrayIconConfig.init();
 
         try {

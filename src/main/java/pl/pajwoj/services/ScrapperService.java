@@ -50,7 +50,11 @@ public class ScrapperService {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
+
         for (Map<String, Object> current : data.getSunriseSunset()) {
+            if (LocalDate.parse(current.get("sunrise").toString(), formatter).isBefore(LocalDate.now()))
+                continue; //skip if data is from before today
+
             DayWeather currentWeather = new DayWeather(location);
 
             currentWeather.date(LocalDate.parse(current.get("sunrise").toString(), formatter))
@@ -58,13 +62,12 @@ public class ScrapperService {
                     .sunset((LocalTime.parse(current.get("sunset").toString(), formatter)).plusHours(1));
 
             result.add(currentWeather);
+
         }
 
         for (Map<String, Object> current : data.getHourly()) {
-
             for (DayWeather currentWeather : result) {
                 if (LocalDate.parse(current.get("dateTime").toString(), formatter).isEqual(currentWeather.getDate())) {
-
                     currentWeather.newTime(LocalTime.parse(current.get("dateTime").toString(), formatter))
                             .newTemp(Utilities.round(Double.parseDouble(current.get("temperature").toString()), 1))
                             .newPrecipitation((Double.parseDouble(current.get("rain").toString()) + Double.parseDouble(current.get("snow").toString())) + "");

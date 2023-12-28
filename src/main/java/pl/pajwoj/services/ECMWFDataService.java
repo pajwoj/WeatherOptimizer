@@ -1,6 +1,5 @@
 package pl.pajwoj.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import pl.pajwoj.dtos.ECMWF_DTO;
@@ -8,11 +7,12 @@ import pl.pajwoj.exceptions.ECMWFDataException;
 import pl.pajwoj.models.DayWeather;
 import pl.pajwoj.models.Location;
 
-import javax.net.ssl.SSLHandshakeException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 
 public class ECMWFDataService {
     public static ArrayList<DayWeather> get(Location location) throws ECMWFDataException {

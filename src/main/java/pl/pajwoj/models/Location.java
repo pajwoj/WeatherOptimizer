@@ -4,13 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.pajwoj.Utilities;
 
-import javax.net.ssl.SSLHandshakeException;
 import java.net.URL;
 
 public class Location {
-    private String lat;
-    private String lon;
-    private String locationString;
+    private final String lat;
+    private final String lon;
+    private final String locationString;
 
     public Location(String input) {
         ObjectMapper objectMapper = new ObjectMapper();

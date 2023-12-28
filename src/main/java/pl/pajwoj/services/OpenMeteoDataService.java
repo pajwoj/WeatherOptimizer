@@ -1,6 +1,5 @@
 package pl.pajwoj.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import pl.pajwoj.dtos.OpenMeteoDTO;
@@ -8,7 +7,6 @@ import pl.pajwoj.exceptions.OpenMeteoDataException;
 import pl.pajwoj.models.DayWeather;
 import pl.pajwoj.models.Location;
 
-import javax.net.ssl.SSLHandshakeException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
