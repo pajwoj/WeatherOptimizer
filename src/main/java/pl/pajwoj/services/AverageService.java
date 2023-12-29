@@ -1,5 +1,6 @@
 package pl.pajwoj.services;
 
+import org.springframework.stereotype.Service;
 import pl.pajwoj.Utilities;
 import pl.pajwoj.models.DayWeather;
 import pl.pajwoj.models.Location;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class AverageService {
     public static void get(Location location, Map<String, ArrayList<DayWeather>> data) {
         ArrayList<DayWeather> result = resultInit(location);

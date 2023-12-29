@@ -2,6 +2,7 @@ package pl.pajwoj.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import org.springframework.stereotype.Service;
 import pl.pajwoj.dtos.ECMWF_DTO;
 import pl.pajwoj.exceptions.ECMWFDataException;
 import pl.pajwoj.models.DayWeather;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
+@Service
 public class ECMWFDataService {
     public static ArrayList<DayWeather> get(Location location) throws ECMWFDataException {
         ObjectMapper objectMapper = new ObjectMapper();

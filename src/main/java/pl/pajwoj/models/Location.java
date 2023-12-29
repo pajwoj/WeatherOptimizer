@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.pajwoj.Utilities;
 
+import java.io.IOException;
 import java.net.URL;
 
 public class Location {
@@ -27,6 +28,22 @@ public class Location {
             lat = (result.get(0).get("lat").asText());
             lon = (result.get(0).get("lon").asText());
             locationString = (result.get(0).get("display_name").asText());
+        } catch (Exception e) {
+            throw new RuntimeException("Error when getting location data (wrong location?)");
+        }
+    }
+
+    public static void checkValidity(String input) throws RuntimeException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        input = Utilities.removeDiacritics(input);
+
+        String link = "https://nominatim.openstreetmap.org/search.php?q="
+                + input.replace(' ', '+')
+                + "&format=jsonv2&accept-language=pl";
+
+        try {
+            if (objectMapper.readTree(new URL(link)).isEmpty())
+                throw new RuntimeException("Error when getting location data (wrong location?)");
         } catch (Exception e) {
             throw new RuntimeException("Error when getting location data (wrong location?)");
         }

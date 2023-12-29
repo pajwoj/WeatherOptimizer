@@ -2,6 +2,7 @@ package pl.pajwoj.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import org.springframework.stereotype.Service;
 import pl.pajwoj.dtos.OpenMeteoDTO;
 import pl.pajwoj.exceptions.OpenMeteoDataException;
 import pl.pajwoj.models.DayWeather;
@@ -13,6 +14,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+@Service
 public class OpenMeteoDataService {
     public static ArrayList<DayWeather> get(Location location) throws OpenMeteoDataException {
         ObjectMapper objectMapper = new ObjectMapper();

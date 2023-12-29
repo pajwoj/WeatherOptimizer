@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.springframework.stereotype.Service;
 import pl.pajwoj.Utilities;
 import pl.pajwoj.dtos.ScrapperDTO;
 import pl.pajwoj.exceptions.ScrapperDataException;
@@ -17,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 
+@Service
 public class ScrapperService {
     public static ArrayList<DayWeather> get(Location location) throws ScrapperDataException {
         ObjectMapper objectMapper = new ObjectMapper();
