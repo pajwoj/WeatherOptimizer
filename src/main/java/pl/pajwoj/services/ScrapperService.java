@@ -72,7 +72,7 @@ public class ScrapperService {
                 if (LocalDate.parse(current.get("dateTime").toString(), formatter).isEqual(currentWeather.getDate())) {
                     currentWeather.newTime(LocalTime.parse(current.get("dateTime").toString(), formatter))
                             .newTemp(Utilities.round(Double.parseDouble(current.get("temperature").toString()), 1))
-                            .newPrecipitation((Double.parseDouble(current.get("rain").toString()) + Double.parseDouble(current.get("snow").toString())) + "");
+                            .newPrecipitation(Utilities.round(Utilities.round(Double.parseDouble(current.get("rain").toString()), 1) + Utilities.round(Double.parseDouble(current.get("snow").toString()), 1), 1).toString());
                 }
             }
         }
