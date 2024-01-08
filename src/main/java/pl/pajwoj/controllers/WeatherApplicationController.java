@@ -30,7 +30,7 @@ public class WeatherApplicationController {
         Map<String, ArrayList<DayWeather>> result = service.getData(location);
 
         if (result == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         else
             return new ResponseEntity<>(result, HttpStatus.OK);
