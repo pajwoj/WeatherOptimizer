@@ -22,7 +22,7 @@ $.ajax({
     },
 
     error: function () {
-        document.getElementById("content").innerHTML = "Error when getting location data (wrong location?). Try again!" + "<br><br><a href=\"index.html\">Back to main page</a>"
+        document.getElementById("content").innerHTML = "Error when getting location data (wrong location?). Try again!" + "<br><br><a href=\"../index.html\">Back to main page</a>"
         document.title = "Error! - Weather Optimizer";
     }
 });
