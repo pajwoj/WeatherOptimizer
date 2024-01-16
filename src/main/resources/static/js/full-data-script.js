@@ -22,7 +22,8 @@ $.ajax({
     },
 
     error: function () {
-        document.getElementById("content").innerHTML = "Error when getting location data (wrong location?). Try again!" + "<br><br><a href=\"../index.html\">Back to main page</a>"
+        document.getElementById("content").innerHTML = "Error when getting location data (wrong location?). Try again!" + "<br><br><a href=\"../../index.html\">\n" +
+            "<button>Back to homepage!</button></a>"
         document.title = "Error! - Weather Optimizer";
     }
 });
@@ -33,7 +34,7 @@ function getDateString(dateString, locale) {
 }
 
 function loadData() {
-    $("#res-day").text("Current date: " + getDateString(jsonResponse.OpenMeteo[dayOfWeek].date, "pl-PL"));
+    $("#res-day").text("Current date: " + getDateString(jsonResponse.OpenMeteo[dayOfWeek].date, "en-GB"));
 
     clearTables();
     prepareTables();

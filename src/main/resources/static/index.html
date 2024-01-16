@@ -5,16 +5,31 @@
     <title>Weather Optimizer</title>
 
     <script src="js/jquery-3.7.1.js"></script>
+    <script src="js/geo-data-script.js"></script>
 </head>
 <body>
 <div id="header" style="text-align: center;">
     <h1 style="text-align: center; font-size: 50px" >Weather Optimizer</h1>
 
-    <form action="html/results.html">
-        <label for="location">Location</label>
-        <input style="margin: 10px" type="text" id="location" name="location"><br>
-        <button id="submit">Submit</button>
+    <div id="text">
+        Welcome to Weather Optimizer! <br>
+        You can use this app to check weather forecasts or geographical data for a given location.<br>
+        <b>Full forecast</b> - returns all data from all data sources (temperatures every 3 hours, precipitation every 3 hours, precipitation chance, sunrise and sunset hours for each day).<br>
+        <b>Quick forecast</b> - returns shortened information (highest temperature for every day, precipitation chance, sunrise and sunset hours for each day).<br>
+        <b>Geographical data</b> - returns latitude, longitude and the name of given location (if found).<br>
+    </div>
+
+    <form action="html/full-results/results.html">
+        <input type="text" id="location" name="location" placeholder="Input your location..."><br>
+        <button id="submit-full">Get full forecast!</button><br><br>
+        <button id="submit-quick" formaction="html/quick-results/results.html">Get quick forecast!</button><br><br>
+        <button id="geo-data" formaction="">Get geographical data for input!</button>
     </form>
 </div>
+
+<div id="geo" style="text-align: center; margin: 15px;"></div>
 </body>
+
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="icon" href="icon.png" type="image/x-icon">
 </html>

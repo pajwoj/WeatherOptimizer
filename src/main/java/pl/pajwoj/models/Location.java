@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.pajwoj.Utilities;
 
-import java.io.IOException;
 import java.net.URL;
 
 public class Location {

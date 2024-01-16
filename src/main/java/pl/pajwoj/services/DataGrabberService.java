@@ -1,6 +1,7 @@
 package pl.pajwoj.services;
 
 import org.springframework.stereotype.Service;
+import pl.pajwoj.Utilities;
 import pl.pajwoj.exceptions.ECMWFDataException;
 import pl.pajwoj.exceptions.OpenMeteoDataException;
 import pl.pajwoj.exceptions.ScrapperDataException;
@@ -9,6 +10,7 @@ import pl.pajwoj.models.DayWeather;
 import pl.pajwoj.models.Location;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +48,22 @@ public class DataGrabberService {
         }
 
         AverageService.get(location, result);
+
+        return result;
+    }
+
+    public ArrayList<DayWeather> getQuickData(String locationInput) {
+        Map<String, ArrayList<DayWeather>> data = this.getData(locationInput);
+
+        ArrayList<DayWeather> result = new ArrayList<>();
+
+        data.get("Average").forEach((value) -> result.add(new DayWeather(value.getLocation())
+                .precipitationChance(value.getPrecipitationChance())
+                .date(value.getDate())
+                .newTemp(Utilities.round(Collections.max(value.getTemps()), 0))
+                .sunrise(value.getSunrise())
+                .sunset(value.getSunset())
+        ));
 
         return result;
     }

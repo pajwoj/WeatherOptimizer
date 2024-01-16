@@ -14,7 +14,7 @@ public class TrayIconConfig {
 
         PopupMenu menu = getPopupMenu();
 
-        InputStream imageStream = ClassLoader.getSystemClassLoader().getResourceAsStream("trayicon.png");
+        InputStream imageStream = ClassLoader.getSystemClassLoader().getResourceAsStream("static/icon.png");
         BufferedImage image;
         try {
             assert imageStream != null;
